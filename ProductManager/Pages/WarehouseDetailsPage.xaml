@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ProductManager.Pages.WarehouseDetailsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:ProductManager.UIModels;assembly=ProductManager.UIModels"
+    x:DataType="models:WarehouseUIModel"
+    Title="Warehouse Details"
+    Style="{StaticResource AppPageStyle}">
+
+    <Grid RowDefinitions="Auto,*">
+        <Border
+            Style="{StaticResource WarehouseCardStyle}"
+            Margin="16,16,16,0">
+
+            <VerticalStackLayout Spacing="8">
+                <Label
+                    Text="{Binding NameWithProductsDesc}"
+                    Style="{StaticResource MainCardTitleStyle}" />
+
+                <Label Text="location" Style="{StaticResource SectionCaptionStyle}" />
+                <Label
+                    Text="{Binding Location, Converter={StaticResource EnumToDisplayName}}"
+                    Style="{StaticResource ValueTextStyle}" />  
+
+                <Label Text="total value" Style="{StaticResource SectionCaptionStyle}" />
+                <Label
+                    Text="{Binding TotalValueDesc, StringFormat='{}{0}'}"
+                    Style="{StaticResource ValueTextStyle}" />  
+            </VerticalStackLayout>
+        </Border>
+
+        <CollectionView
+            Grid.Row="1"
+            ItemsSource="{Binding Products}"
+            Margin="16"
+            SelectionMode="Single"
+            SelectionChanged="ProductSelected">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:ProductUIModel">
+                    <Border Style="{StaticResource ProductCardStyle}">
+
+                        <VerticalStackLayout Spacing="4">
+                            <Label
+                                Text="{Binding Name}"
+                                Style="{StaticResource MainCardTitleStyle}" />
+
+                            <Label
+                                Text="{Binding Category, Converter={StaticResource EnumToDisplayName}}"
+                                Style="{StaticResource SecondaryInfoStyle}"
+                                HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

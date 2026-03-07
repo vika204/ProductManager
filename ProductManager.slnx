@@ -4,4 +4,7 @@
   <Project Path="ProductManager.DBModels/ProductManager.DBModels.csproj" />
   <Project Path="ProductManager.Services/ProductManager.Services.csproj" Id="527dc75c-1285-4327-8d57-1f45175a03cf" />
   <Project Path="ProductManager.UIModels/ProductManager.UIModels.csproj" />
+  <Project Path="ProductManager/ProductManager.csproj" Id="6c950e19-ac29-4627-b0b2-9ebf4a6cf77f">
+    <Deploy Solution="Debug|*" />
+  </Project>
 </Solution>

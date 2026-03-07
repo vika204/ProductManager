@@ -5,13 +5,14 @@ namespace ProductManager.UIModels
 {
     public class ProductUIModel
     {
-        private ProductDBModel _productDBModel;
+        // keeps reference to the original db model if it already exists
+        private ProductDBModel? _productDBModel;
         private Guid _warehouseId;
-        private string _name;
+        private string _name = string.Empty;
         private int _quantity;
         private decimal _price;
         private ProductCategory _productCategory;
-        private string _description;
+        private string _description = string.Empty;
 
         public Guid? Id
         {
@@ -53,12 +54,24 @@ namespace ProductManager.UIModels
         {
             get => _quantity * _price;
         }
+        public string PriceDesc
+        {
+            get => Price.ToString("0.00");
+        }
 
+        public string TotalValueDesc
+        {
+            get => TotalValue.ToString("0.00");
+        }
+
+
+        // this constructor is used when a new product is created for a warehouse
         public ProductUIModel(Guid warehouseId)
         {
             _warehouseId = warehouseId;
         }
 
+        // this constructor wraps an existing db model for ui usage
         public ProductUIModel(ProductDBModel dbModel)
         {
             _productDBModel = dbModel;
@@ -71,8 +84,10 @@ namespace ProductManager.UIModels
         }
 
 
+        // updates an existing db model or creates a new one
         public void SaveChangesToDBModel()
         {
+            // if db model already exists, update its values
             if (_productDBModel != null)
             {
                 _productDBModel.WarehouseId = _warehouseId;
@@ -83,10 +98,15 @@ namespace ProductManager.UIModels
                 _productDBModel.Description = _description;
 
             }
+            // otherwise create a new db model from ui data
             else
             {
                 _productDBModel = new ProductDBModel(_warehouseId, _name, _quantity, _price, _productCategory, _description);
             }
+        }
+        public override string ToString()
+        {
+            return $"Product: {Name}, Category: {Category}, Total value: {TotalValue}";
         }
     }
 }
