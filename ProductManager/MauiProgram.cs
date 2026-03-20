@@ -24,7 +24,7 @@ namespace ProductManager
             // one shared storage service instance for the whole app
             builder.Services.AddSingleton<IStorageService, StorageService>();
             // pages are created through di when navigation happens
-            builder.Services.AddTransient<WarehousesPage>();
+            builder.Services.AddSingleton<WarehousesPage>();
             builder.Services.AddTransient<WarehouseDetailsPage>();
             builder.Services.AddTransient<ProductDetailsPage>();
 
