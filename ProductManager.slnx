@@ -1,6 +1,5 @@
 <Solution>
   <Project Path="ProductManager.Common/ProductManager.Common.csproj" />
-  <Project Path="ProductManager.ConsoleApp/ProductManager.ConsoleApp.csproj" Id="acc05665-732a-45f7-8573-4f7ad196b630" />
   <Project Path="ProductManager.DBModels/ProductManager.DBModels.csproj" />
   <Project Path="ProductManager.Services/ProductManager.Services.csproj" Id="527dc75c-1285-4327-8d57-1f45175a03cf" />
   <Project Path="ProductManager.UIModels/ProductManager.UIModels.csproj" />
