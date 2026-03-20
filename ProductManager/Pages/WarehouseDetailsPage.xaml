@@ -15,7 +15,7 @@
 
             <VerticalStackLayout Spacing="8">
                 <Label
-                    Text="{Binding NameWithProductsDesc}"
+                    Text="{Binding Name}"
                     Style="{StaticResource MainCardTitleStyle}" />
 
                 <Label Text="location" Style="{StaticResource SectionCaptionStyle}" />

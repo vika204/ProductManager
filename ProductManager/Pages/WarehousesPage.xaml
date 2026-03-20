@@ -20,7 +20,7 @@
                 <Border Style="{StaticResource WarehouseCardStyle}">
                     <VerticalStackLayout Spacing="4">
                         <Label
-                            Text="{Binding NameWithProductsDesc}"
+                            Text="{Binding Name}"
                             Style="{StaticResource MainCardTitleStyle}" />
 
                         <Label
