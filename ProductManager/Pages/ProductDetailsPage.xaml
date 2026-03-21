@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="ProductManager.Pages.ProductDetailsPage"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:models="clr-namespace:ProductManager.UIModels;assembly=ProductManager.UIModels"
-    x:DataType="models:ProductUIModel"
-    Title="Product Details"
-    Style="{StaticResource AppPageStyle}">
+ x:Class="ProductManager.Pages.ProductDetailsPage"
+ xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+ xmlns:vms="clr-namespace:ProductManager.ViewModels"
+ x:DataType="vms:ProductDetailsViewModel"
+ Title="Product Details"
+ Style="{StaticResource AppPageStyle}">
 
     <ScrollView>
         <Border
-            Style="{StaticResource ProductCardStyle}"
-            Margin="16">
+           Style="{StaticResource ProductCardStyle}"
+           Margin="16">
 
             <VerticalStackLayout Spacing="8">
                 <Label
-                    Text="{Binding Name}"
-                    Style="{StaticResource MainCardTitleStyle}" />  
+                     Text="{Binding Name}"
+                     Style="{StaticResource MainCardTitleStyle}" />
 
                 <Label Text="quantity" Style="{StaticResource SectionCaptionStyle}" />
                 <Label Text="{Binding Quantity}" Style="{StaticResource ValueTextStyle}" />
 
                 <Label Text="price" Style="{StaticResource SectionCaptionStyle}" />
-                <Label Text="{Binding PriceDesc}" Style="{StaticResource ValueTextStyle}" />
+                <Label Text="{Binding Price, StringFormat='{}{0:0.00}'}" Style="{StaticResource ValueTextStyle}" />
 
                 <Label Text="category" Style="{StaticResource SectionCaptionStyle}" />
                 <Label
-                    Text="{Binding Category, Converter={StaticResource EnumToDisplayName}}"
-                    Style="{StaticResource ValueTextStyle}" />
+                     Text="{Binding Category, Converter={StaticResource EnumToDisplayName}}"
+                     Style="{StaticResource ValueTextStyle}" />
 
                 <Label Text="total value" Style="{StaticResource SectionCaptionStyle}" />
-                <Label Text="{Binding TotalValueDesc}" Style="{StaticResource ValueTextStyle}" />
+                <Label Text="{Binding TotalValue, StringFormat='{}{0:0.00}'}" Style="{StaticResource ValueTextStyle}" />
 
                 <Label Text="description" Style="{StaticResource SectionCaptionStyle}" />
                 <Label Text="{Binding Description}" Style="{StaticResource ValueTextStyle}" />

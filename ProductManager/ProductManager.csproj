@@ -63,15 +63,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\ProductManager.Common\ProductManager.Common.csproj" />
-	  <ProjectReference Include="..\ProductManager.DBModels\ProductManager.DBModels.csproj" />
+	  <ProjectReference Include="..\ProductManager.DTOModels\ProductManager.DTOModels.csproj" />
 	  <ProjectReference Include="..\ProductManager.Services\ProductManager.Services.csproj" />
-	  <ProjectReference Include="..\ProductManager.UIModels\ProductManager.UIModels.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

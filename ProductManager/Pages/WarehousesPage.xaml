@@ -3,9 +3,9 @@
     x:Class="ProductManager.Pages.WarehousesPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:models="clr-namespace:ProductManager.UIModels;assembly=ProductManager.UIModels"
-    xmlns:pages="clr-namespace:ProductManager.Pages"
-    x:DataType="pages:WarehousesPage"
+    xmlns:models="clr-namespace:ProductManager.DTOModels.Warehouse;assembly=ProductManager.DTOModels"
+    xmlns:vms="clr-namespace:ProductManager.ViewModels"
+    x:DataType="vms:WarehousesViewModel"
     Title="Warehouses"
     Style="{StaticResource AppPageStyle}">
 
@@ -13,20 +13,21 @@
         ItemsSource="{Binding Warehouses}"
         Margin="16"
         SelectionMode="Single"
-        SelectionChanged="WarehouseSelected">
+        SelectedItem="{Binding CurrentWarehouse}"
+        SelectionChangedCommand="{Binding WarehouseSelectedCommand}">
 
         <CollectionView.ItemTemplate>
-            <DataTemplate x:DataType="models:WarehouseUIModel">
+            <DataTemplate x:DataType="models:WarehouseListDTO">
                 <Border Style="{StaticResource WarehouseCardStyle}">
                     <VerticalStackLayout Spacing="4">
                         <Label
-                            Text="{Binding Name}"
-                            Style="{StaticResource MainCardTitleStyle}" />
+                           Text="{Binding Name}"
+                           Style="{StaticResource MainCardTitleStyle}" />
 
                         <Label
-                            Text="{Binding Location, Converter={StaticResource EnumToDisplayName}}"
-                            Style="{StaticResource SecondaryInfoStyle}"
-                            HorizontalOptions="Center" />
+                           Text="{Binding Location, Converter={StaticResource EnumToDisplayName}}"
+                           Style="{StaticResource SecondaryInfoStyle}"
+                           HorizontalOptions="Center" />
                     </VerticalStackLayout>
                 </Border>
             </DataTemplate>

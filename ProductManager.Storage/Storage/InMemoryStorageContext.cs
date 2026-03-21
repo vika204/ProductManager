@@ -1,25 +1,23 @@
 ﻿using ProductManager.Common.Enums;
 using ProductManager.DBModels;
 
-namespace ProductManager.Services
+namespace ProductManager.Storage
 {
-    internal static class FakeStorage
+    //inmemory storage context 
+    public class InMemoryStorageContext : IStorageContext
     {
+        // keeps test data in static lists so app can reuse the same instances
+
+        // warehouses list used as a primary source for warehouse data
         private static readonly List<WarehouseDBModel> _warehouses;
+
+        // products list used as a primary source for product data
         private static readonly List<ProductDBModel> _products;
 
-        internal static IEnumerable<WarehouseDBModel> Warehouses
+        // initialize test data once
+        static InMemoryStorageContext()
         {
-            get { return _warehouses.ToList(); }
-        }
-
-        internal static IEnumerable<ProductDBModel> Products
-        {
-            get { return _products.ToList(); }
-        }
-
-        static FakeStorage()
-        {
+            // create warehouses
             WarehouseDBModel warehouseOfBooks = new WarehouseDBModel("Books", WarehouseLocation.Lviv);
             WarehouseDBModel warehouseOfElectronics = new WarehouseDBModel("Electronics", WarehouseLocation.Kyiv);
             WarehouseDBModel warehouseOfClothing = new WarehouseDBModel("Clothing", WarehouseLocation.Odesa);
@@ -31,6 +29,7 @@ namespace ProductManager.Services
                 warehouseOfClothing
             };
 
+            // create products and link them to warehouses via warehouse id
             _products = new List<ProductDBModel>
             {
                 new ProductDBModel(warehouseOfBooks.Id, "Harry Potter and the Sorcerer's Stone", 100, 19.99m, ProductCategory.Books, "The first book in the Harry Potter series."),
@@ -56,6 +55,30 @@ namespace ProductManager.Services
                 new ProductDBModel(warehouseOfClothing.Id, "Sneakers", 80, 69.99m, ProductCategory.Clothing, "Comfortable and trendy sneakers for everyday wear."),
                 new ProductDBModel(warehouseOfClothing.Id, "Dress", 60, 59.99m, ProductCategory.Clothing, "An elegant dress suitable for special occasions.")
             };
+        }
+
+        // return all warehouses as a copy
+        public IEnumerable<WarehouseDBModel> GetWarehouses()
+        {
+            return _warehouses.ToList();
+        }
+
+        // return one warehouse by id
+        public WarehouseDBModel GetWarehouse(Guid warehouseId)
+        {
+            return _warehouses.First(w => w.Id == warehouseId);
+        }
+
+        // return products for a given warehouse
+        public IEnumerable<ProductDBModel> GetProducts(Guid warehouseId)
+        {
+            return _products.Where(p => p.WarehouseId == warehouseId).ToList();
+        }
+
+        // return one product by id
+        public ProductDBModel GetProduct(Guid productId)
+        {
+            return _products.First(p => p.Id == productId);
         }
     }
 }

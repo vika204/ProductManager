@@ -1,8 +1,10 @@
 <Solution>
   <Project Path="ProductManager.Common/ProductManager.Common.csproj" />
   <Project Path="ProductManager.DBModels/ProductManager.DBModels.csproj" />
+  <Project Path="ProductManager.DTOModels/ProductManager.DTOModels.csproj" Id="34789d44-6267-4615-88cb-bced2834fa72" />
+  <Project Path="ProductManager.Repostory/ProductManager.Repostory.csproj" Id="e444d1fe-09a9-4f9c-920b-d1cd279cac93" />
   <Project Path="ProductManager.Services/ProductManager.Services.csproj" Id="527dc75c-1285-4327-8d57-1f45175a03cf" />
-  <Project Path="ProductManager.UIModels/ProductManager.UIModels.csproj" />
+  <Project Path="ProductManager.Storage/ProductManager.Storage.csproj" Id="4a992a15-c342-4ea7-9342-137445a88290" />
   <Project Path="ProductManager/ProductManager.csproj" Id="6c950e19-ac29-4627-b0b2-9ebf4a6cf77f">
     <Deploy Solution="Debug|*" />
   </Project>
