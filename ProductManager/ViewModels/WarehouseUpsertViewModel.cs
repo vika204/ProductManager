@@ -78,7 +78,7 @@ namespace ProductManager.ViewModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error", $"Failed to load warehouse form: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlertAsync("Error", $"Failed to load warehouse form: {ex.Message}", "OK");
             }
             finally
             {
@@ -125,7 +125,7 @@ namespace ProductManager.ViewModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error", $"Failed to save warehouse: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlertAsync("Error", $"Failed to save warehouse: {ex.Message}", "OK");
             }
             finally
             {
@@ -149,7 +149,7 @@ namespace ProductManager.ViewModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error", $"Failed to navigate back: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlertAsync("Error", $"Failed to navigate back: {ex.Message}", "OK");
             }
             finally
             {

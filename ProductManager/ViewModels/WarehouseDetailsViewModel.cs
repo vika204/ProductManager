@@ -86,7 +86,7 @@ namespace ProductManager.ViewModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error", $"Failed to load warehouse details: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlertAsync("Error", $"Failed to load warehouse details: {ex.Message}", "OK");
             }
             finally
             {
@@ -122,7 +122,7 @@ namespace ProductManager.ViewModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error", $"Failed to open product details: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlertAsync("Error", $"Failed to open product details: {ex.Message}", "OK");
             }
             finally
             {
@@ -152,7 +152,7 @@ namespace ProductManager.ViewModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error", $"Failed to open product form: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlertAsync("Error", $"Failed to open product form: {ex.Message}", "OK");
             }
             finally
             {
@@ -182,7 +182,7 @@ namespace ProductManager.ViewModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error", $"Failed to open warehouse form: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlertAsync("Error", $"Failed to open warehouse form: {ex.Message}", "OK");
             }
             finally
             {
@@ -207,7 +207,7 @@ namespace ProductManager.ViewModels
 
             try
             {
-                bool isConfirmed = await Shell.Current.DisplayAlert(
+                bool isConfirmed = await Shell.Current.DisplayAlertAsync(
                     "Confirm",
                     $"Delete warehouse \"{CurrentWarehouse.Name}\" and all its products?",
                     "Yes",
@@ -225,7 +225,7 @@ namespace ProductManager.ViewModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error", $"Failed to delete warehouse: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlertAsync("Error", $"Failed to delete warehouse: {ex.Message}", "OK");
             }
             finally
             {
@@ -245,7 +245,7 @@ namespace ProductManager.ViewModels
 
             try
             {
-                bool isConfirmed = await Shell.Current.DisplayAlert(
+                bool isConfirmed = await Shell.Current.DisplayAlertAsync(
                     "Confirm",
                     $"Delete product \"{product.Name}\"?",
                     "Yes",
@@ -267,7 +267,7 @@ namespace ProductManager.ViewModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error", $"Failed to delete product: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlertAsync("Error", $"Failed to delete product: {ex.Message}", "OK");
             }
             finally
             {

@@ -48,7 +48,7 @@ namespace ProductManager.ViewModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error", $"Failed to load product details: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlertAsync("Error", $"Failed to load product details: {ex.Message}", "OK");
             }
             finally
             {
@@ -78,7 +78,7 @@ namespace ProductManager.ViewModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error", $"Failed to open product form: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlertAsync("Error", $"Failed to open product form: {ex.Message}", "OK");
             }
             finally
             {
@@ -103,7 +103,7 @@ namespace ProductManager.ViewModels
 
             try
             {
-                bool isConfirmed = await Shell.Current.DisplayAlert(
+                bool isConfirmed = await Shell.Current.DisplayAlertAsync(
                     "Confirm",
                     $"Delete product \"{CurrentProduct.Name}\"?",
                     "Yes",
@@ -121,7 +121,7 @@ namespace ProductManager.ViewModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error", $"Failed to delete product: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlertAsync("Error", $"Failed to delete product: {ex.Message}", "OK");
             }
             finally
             {
