@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProductManager.DBModels\ProductManager.DBModels.csproj" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
   </ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\ProductManager.DBModels\ProductManager.DBModels.csproj" />
+		<ProjectReference Include="..\ProductManager.Common\ProductManager.Common.csproj" />
+	</ItemGroup>
 
 </Project>

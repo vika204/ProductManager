@@ -1,75 +1,132 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using ProductManager.Common.Enums;
+using CommunityToolkit.Mvvm.Input;
 using ProductManager.DTOModels.Product;
+using ProductManager.Pages;
 using ProductManager.Services;
-using System;
-using System.Collections.Generic;
 
 namespace ProductManager.ViewModels
 {
-    // view model for product details page
-    // receives product id from shell navigation and loads product dto
-    public partial class ProductDetailsViewModel : ObservableObject, IQueryAttributable
+    public partial class ProductDetailsViewModel : BaseViewModel, IQueryAttributable
     {
-        // current product is passed through shell navigation
         private readonly IProductService _productService;
 
-        // loaded product details dto
+        // product id received from navigation.
+        private Guid _productId;
+
+        // data shown on product details page.
+        [ObservableProperty]
         private ProductDetailsDTO? _currentProduct;
-
-        // calculated value for ui
-        private decimal _totalValue;
-
-        // properties are used directly in xaml bindings
-        public string Name => _currentProduct?.Name;
-
-        public int Quantity => _currentProduct?.Quantity ?? 0;
-
-        public decimal Price => _currentProduct?.Price ?? 0m;
-
-        public ProductCategory? Category => _currentProduct?.Category;
-
-        public string Description => _currentProduct?.Description;
-
-        // calculated property for ui
-        public decimal TotalValue => _totalValue;
 
         public ProductDetailsViewModel(IProductService productService)
         {
             _productService = productService;
         }
 
-        // shell passes parameters into the view model
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            // get product id from previous page
-            var productId = (Guid)query["ProductId"];
-
-            // load product details dto
-            _currentProduct = _productService.GetProduct(productId);
-
-            // calculate total value for selected product
-            CalculateTotalValue();
-
-            // notify ui that dependent properties changed
-            OnPropertyChanged(nameof(Name));
-            OnPropertyChanged(nameof(Quantity));
-            OnPropertyChanged(nameof(Price));
-            OnPropertyChanged(nameof(Category));
-            OnPropertyChanged(nameof(Description));
-            OnPropertyChanged(nameof(TotalValue));
+            // receives ProductId from Shell navigation.
+            if (query.TryGetValue("ProductId", out object? productId))
+            {
+                _productId = (Guid)productId;
+            }
         }
 
-        // calculate total value for the product
-        private void CalculateTotalValue()
+        [RelayCommand]
+        internal async Task RefreshData()
         {
-            if (_currentProduct == null)
+            if (IsBusy)
             {
-                _totalValue = 0m;
                 return;
             }
 
-            _totalValue = _currentProduct.Price * _currentProduct.Quantity;
+            IsBusy = true;
+
+            try
+            {
+                CurrentProduct = await _productService.GetProductAsync(_productId)
+                    ?? throw new InvalidOperationException("Product does not exist.");
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", $"Failed to load product details: {ex.Message}", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        [RelayCommand]
+        private async Task EditProduct()
+        {
+            if (IsBusy)
+            {
+                return;
+            }
+
+            IsBusy = true;
+
+            try
+            {
+                // opens product edit form with existing product id.
+                await Shell.Current.GoToAsync(
+                    nameof(ProductUpsertPage),
+                    new Dictionary<string, object>
+                    {
+                        { "ProductId", _productId }
+                    });
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", $"Failed to open product form: {ex.Message}", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        [RelayCommand]
+        private async Task DeleteProduct()
+        {
+            if (IsBusy)
+            {
+                return;
+            }
+
+            if (CurrentProduct is null)
+            {
+                return;
+            }
+
+            IsBusy = true;
+
+            try
+            {
+                bool isConfirmed = await Shell.Current.DisplayAlert(
+                    "Confirm",
+                    $"Delete product \"{CurrentProduct.Name}\"?",
+                    "Yes",
+                    "No");
+
+                if (!isConfirmed)
+                {
+                    return;
+                }
+
+                await _productService.DeleteProductAsync(_productId);
+
+                // return back after successful delete.
+                await Shell.Current.GoToAsync("..");
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", $"Failed to delete product: {ex.Message}", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
     }
 }

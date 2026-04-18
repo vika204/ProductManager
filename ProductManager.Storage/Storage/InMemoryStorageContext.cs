@@ -6,13 +6,9 @@ namespace ProductManager.Storage
     //inmemory storage context 
     public class InMemoryStorageContext : IStorageContext
     {
-        // keeps test data in static lists so app can reuse the same instances
-
-        // warehouses list used as a primary source for warehouse data
-        private static readonly List<WarehouseDBModel> _warehouses;
-
-        // products list used as a primary source for product data
-        private static readonly List<ProductDBModel> _products;
+        // temporary in-memory collections are used only to prepare initial seed data.
+        private static readonly List<WarehouseDBModel> _warehouses = new();
+        private static readonly List<ProductDBModel> _products = new();
 
         // initialize test data once
         static InMemoryStorageContext()
@@ -56,29 +52,121 @@ namespace ProductManager.Storage
                 new ProductDBModel(warehouseOfClothing.Id, "Dress", 60, 59.99m, ProductCategory.Clothing, "An elegant dress suitable for special occasions.")
             };
         }
-
-        // return all warehouses as a copy
-        public IEnumerable<WarehouseDBModel> GetWarehouses()
+        public Task<IEnumerable<WarehouseDBModel>> GetWarehousesAsync()
         {
-            return _warehouses.ToList();
+            // we return copies to avoid accidental mutation of seeds
+            IEnumerable<WarehouseDBModel> warehouses = _warehouses
+                .Select(warehouse => new WarehouseDBModel(warehouse.Id, warehouse.Name, warehouse.Location))
+                .ToList();
+
+            return Task.FromResult(warehouses);
         }
 
-        // return one warehouse by id
-        public WarehouseDBModel GetWarehouse(Guid warehouseId)
+        public Task<WarehouseDBModel?> GetWarehouseAsync(Guid warehouseId)
         {
-            return _warehouses.First(w => w.Id == warehouseId);
+            WarehouseDBModel? warehouse = _warehouses.FirstOrDefault(item => item.Id == warehouseId);
+
+            if (warehouse is null)
+            {
+                return Task.FromResult<WarehouseDBModel?>(null);
+            }
+
+            return Task.FromResult<WarehouseDBModel?>(new WarehouseDBModel(warehouse.Id, warehouse.Name, warehouse.Location));
         }
 
-        // return products for a given warehouse
-        public IEnumerable<ProductDBModel> GetProducts(Guid warehouseId)
+        public Task SaveWarehouseAsync(WarehouseDBModel warehouse)
         {
-            return _products.Where(p => p.WarehouseId == warehouseId).ToList();
+            WarehouseDBModel? existingWarehouse = _warehouses.FirstOrDefault(item => item.Id == warehouse.Id);
+
+            if (existingWarehouse is null)
+            {
+                _warehouses.Add(new WarehouseDBModel(warehouse.Id, warehouse.Name, warehouse.Location));
+                return Task.CompletedTask;
+            }
+
+            existingWarehouse.Name = warehouse.Name;
+            existingWarehouse.Location = warehouse.Location;
+
+            return Task.CompletedTask;
         }
 
-        // return one product by id
-        public ProductDBModel GetProduct(Guid productId)
+        // when we delete a warehouse, we also delete all products linked to that warehouse.
+        public Task DeleteWarehouseAsync(Guid warehouseId)
         {
-            return _products.First(p => p.Id == productId);
+            _warehouses.RemoveAll(item => item.Id == warehouseId);
+            _products.RemoveAll(item => item.WarehouseId == warehouseId);
+            return Task.CompletedTask;
+        }
+
+        public Task<IEnumerable<ProductDBModel>> GetProductsByWarehouseAsync(Guid warehouseId)
+        {
+            // we return copies for safety, not original references.
+            IEnumerable<ProductDBModel> products = _products
+                .Where(product => product.WarehouseId == warehouseId)
+                .Select(product => new ProductDBModel(
+                    product.Id,
+                    product.WarehouseId,
+                    product.Name,
+                    product.Quantity,
+                    product.Price,
+                    product.Category,
+                    product.Description))
+                .ToList();
+
+            return Task.FromResult(products);
+        }
+
+        public Task<ProductDBModel?> GetProductAsync(Guid productId)
+        {
+            ProductDBModel? product = _products.FirstOrDefault(item => item.Id == productId);
+
+            if (product is null)
+            {
+                return Task.FromResult<ProductDBModel?>(null);
+            }
+
+            return Task.FromResult<ProductDBModel?>(new ProductDBModel(
+                product.Id,
+                product.WarehouseId,
+                product.Name,
+                product.Quantity,
+                product.Price,
+                product.Category,
+                product.Description));
+        }
+
+        public Task SaveProductAsync(ProductDBModel product)
+        {
+            ProductDBModel? existingProduct = _products.FirstOrDefault(item => item.Id == product.Id);
+
+            if (existingProduct is null)
+            {
+                _products.Add(new ProductDBModel(
+                    product.Id,
+                    product.WarehouseId,
+                    product.Name,
+                    product.Quantity,
+                    product.Price,
+                    product.Category,
+                    product.Description));
+
+                return Task.CompletedTask;
+            }
+
+            existingProduct.WarehouseId = product.WarehouseId;
+            existingProduct.Name = product.Name;
+            existingProduct.Quantity = product.Quantity;
+            existingProduct.Price = product.Price;
+            existingProduct.Category = product.Category;
+            existingProduct.Description = product.Description;
+
+            return Task.CompletedTask;
+        }
+
+        public Task DeleteProductAsync(Guid productId)
+        {
+            _products.RemoveAll(item => item.Id == productId);
+            return Task.CompletedTask;
         }
     }
 }

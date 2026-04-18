@@ -13,11 +13,20 @@ namespace ProductManager.DTOModels.Product
 
         public ProductCategory Category { get; }
 
-        public ProductListDTO(Guid id, string name, ProductCategory category)
+        public int Quantity { get; }
+
+        public decimal Price { get; }
+
+        public decimal TotalValue { get; }
+
+        public ProductListDTO(Guid id, string name, ProductCategory category, int quantity, decimal price, decimal totalValue)
         {
             Id = id;
             Name = name;
             Category = category;
+            Quantity = quantity;
+            Price = price;
+            TotalValue = totalValue;
         }
     }
 }

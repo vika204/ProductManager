@@ -7,7 +7,6 @@ namespace ProductManager.Repostory
     // it hides storage implementation from service layer
     public class ProductRepository : IProductRepository
     {
-        // storage context provides raw db models
         private readonly IStorageContext _storage;
 
         public ProductRepository(IStorageContext storage)
@@ -16,15 +15,27 @@ namespace ProductManager.Repostory
         }
 
         // return products for selected warehouse
-        public IEnumerable<ProductDBModel> GetProducts(Guid warehouseId)
+        public Task<IEnumerable<ProductDBModel>> GetProductsByWarehouseAsync(Guid warehouseId)
         {
-            return _storage.GetProducts(warehouseId);
+            return _storage.GetProductsByWarehouseAsync(warehouseId);
         }
 
         // return one product by id
-        public ProductDBModel GetProduct(Guid productId)
+        public Task<ProductDBModel?> GetProductAsync(Guid productId)
         {
-            return _storage.GetProduct(productId);
+            return _storage.GetProductAsync(productId);
+        }
+
+        // save product
+        public Task SaveProductAsync(ProductDBModel product)
+        {
+            return _storage.SaveProductAsync(product);
+        }
+
+        // delete product by id
+        public Task DeleteProductAsync(Guid productId)
+        {
+            return _storage.DeleteProductAsync(productId);
         }
     }
 }

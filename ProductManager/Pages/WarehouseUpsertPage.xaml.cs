@@ -2,11 +2,11 @@ using ProductManager.ViewModels;
 
 namespace ProductManager.Pages;
 
-public partial class ProductDetailsPage : ContentPage
+public partial class WarehouseUpsertPage : ContentPage
 {
-    private readonly ProductDetailsViewModel _viewModel;
+    private readonly WarehouseUpsertViewModel _viewModel;
 
-    public ProductDetailsPage(ProductDetailsViewModel vm)
+    public WarehouseUpsertPage(WarehouseUpsertViewModel vm)
     {
         InitializeComponent();
         BindingContext = _viewModel = vm;
@@ -15,8 +15,6 @@ public partial class ProductDetailsPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-
-        // reloads product details every time the page becomes visible
         await _viewModel.RefreshData();
     }
 }

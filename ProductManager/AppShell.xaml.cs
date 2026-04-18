@@ -7,15 +7,10 @@ namespace ProductManager
         public AppShell()
         {
             InitializeComponent();
-
-            // register nested routes for shell navigation
-            Routing.RegisterRoute(
-                $"{nameof(WarehousesPage)}/{nameof(WarehouseDetailsPage)}",
-                typeof(WarehouseDetailsPage));
-
-            Routing.RegisterRoute(
-                $"{nameof(WarehousesPage)}/{nameof(WarehouseDetailsPage)}/{nameof(ProductDetailsPage)}",
-                typeof(ProductDetailsPage));
+            Routing.RegisterRoute(nameof(WarehouseDetailsPage), typeof(WarehouseDetailsPage));
+            Routing.RegisterRoute(nameof(ProductDetailsPage), typeof(ProductDetailsPage));
+            Routing.RegisterRoute(nameof(WarehouseUpsertPage), typeof(WarehouseUpsertPage));
+            Routing.RegisterRoute(nameof(ProductUpsertPage), typeof(ProductUpsertPage));
         }
     }
 }

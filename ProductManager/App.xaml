@@ -13,6 +13,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <tools:EnumDisplayConverter x:Key="EnumToDisplayName" />
+            <tools:StringToBoolConverter x:Key="StringToBoolConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

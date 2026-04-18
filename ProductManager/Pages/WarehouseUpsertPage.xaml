@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ProductManager.Pages.WarehouseUpsertPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vms="clr-namespace:ProductManager.ViewModels"
+    x:DataType="vms:WarehouseUpsertViewModel"
+    Title="{Binding PageTitle}"
+    IsEnabled="{Binding IsNotBusy}"
+    Style="{StaticResource AppPageStyle}">
+
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout Padding="16" Spacing="10">
+
+                <Label Text="Warehouse name" />
+                <Border Style="{StaticResource FormInputBorderStyle}">
+                    <Entry
+                        Placeholder="Warehouse name"
+                        Text="{Binding Name}" />
+                </Border>
+                <Label
+                    IsVisible="{Binding NameError, Converter={StaticResource StringToBoolConverter}}"
+                    Text="{Binding NameError}"
+                    TextColor="Red" />
+
+                <Label Text="Location" />
+                <Border Style="{StaticResource FormInputBorderStyle}">
+                    <Picker
+                        Title="Select location"
+                        TextColor="{StaticResource TextPrimary}"
+                        TitleColor="{StaticResource TextSecondary}"
+                        ItemsSource="{Binding Locations}"
+                        ItemDisplayBinding="{Binding DisplayName}"
+                        SelectedItem="{Binding Location}" />
+                </Border>
+                <Label
+                    IsVisible="{Binding LocationError, Converter={StaticResource StringToBoolConverter}}"
+                    Text="{Binding LocationError}"
+                    TextColor="Red" />
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Button
+                        Grid.Column="0"
+                        Text="Save"
+                        Command="{Binding SaveWarehouseCommand}" />
+
+                    <Button
+                        Grid.Column="1"
+                        Text="Back"
+                        Command="{Binding BackCommand}" />
+                </Grid>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <BoxView
+            BackgroundColor="Gray"
+            InputTransparent="False"
+            IsVisible="{Binding IsBusy}"
+            Opacity="0.2" />
+
+        <ActivityIndicator
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center" />
+    </Grid>
+</ContentPage>

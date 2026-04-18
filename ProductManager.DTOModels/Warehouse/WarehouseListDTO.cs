@@ -13,14 +13,16 @@ namespace ProductManager.DTOModels.Warehouse
 
         public WarehouseLocation Location { get; }
 
-        public int ProductsCount { get; }
+       
+        // computed total value of all products inside warehouse.
+        public decimal TotalValue { get; }
 
-        public WarehouseListDTO(Guid id, string name, WarehouseLocation location, int productsCount)
+        public WarehouseListDTO(Guid id, string name, WarehouseLocation location, decimal totalValue)
         {
             Id = id;
             Name = name;
             Location = location;
-            ProductsCount = productsCount;
+            TotalValue = totalValue;
         }
     }
 }

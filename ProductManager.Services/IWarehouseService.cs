@@ -6,10 +6,22 @@ namespace ProductManager.Services
     // it returns dto models and does not expose db models
     public interface IWarehouseService
     {
-        // list page data
-        IEnumerable<WarehouseListDTO> GetWarehouses();
+        // returns filtered and sorted list of warehouses for main page.
+        Task<IEnumerable<WarehouseListDTO>> GetWarehousesAsync(string? searchText, string? sortOption);
 
-        // list page data
-        WarehouseDetailsDTO GetWarehouse(Guid warehouseId);
+        // returns detailed data for a specific warehouse.
+        Task<WarehouseDetailsDTO?> GetWarehouseAsync(Guid warehouseId);
+
+        // returns warehouse data prepared for edit form.
+        Task<WarehouseUpsertDTO?> GetWarehouseForEditAsync(Guid warehouseId);
+
+        // creates a new warehouse.
+        Task CreateWarehouseAsync(WarehouseUpsertDTO warehouse);
+
+        // updates an existing warehouse.
+        Task UpdateWarehouseAsync(Guid warehouseId, WarehouseUpsertDTO warehouse);
+
+        // Deletes warehouse by identifier.
+        Task DeleteWarehouseAsync(Guid warehouseId);
     }
 }

@@ -2,21 +2,18 @@
 
 namespace ProductManager.Storage
 {
- 
-    // storage context is responsible for providing raw data
-    // it returns only db models and does not know about ui or dto
     public interface IStorageContext
     {
-        // return all warehouses from storage
-        IEnumerable<WarehouseDBModel> GetWarehouses();
+        // Warehouse operations
+        Task<IEnumerable<WarehouseDBModel>> GetWarehousesAsync();
+        Task<WarehouseDBModel?> GetWarehouseAsync(Guid warehouseId);
+        Task SaveWarehouseAsync(WarehouseDBModel warehouse);
+        Task DeleteWarehouseAsync(Guid warehouseId);
 
-        // return one warehouse by id
-        WarehouseDBModel GetWarehouse(Guid warehouseId);
-
-        // return products that belong to a warehouse
-        IEnumerable<ProductDBModel> GetProducts(Guid warehouseId);
-
-        // return one product by id
-        ProductDBModel GetProduct(Guid productId);
+        // Product operations
+        Task<IEnumerable<ProductDBModel>> GetProductsByWarehouseAsync(Guid warehouseId);
+        Task<ProductDBModel?> GetProductAsync(Guid productId);
+        Task SaveProductAsync(ProductDBModel product);
+        Task DeleteProductAsync(Guid productId);
     }
 }

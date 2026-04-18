@@ -1,15 +1,22 @@
 using ProductManager.ViewModels;
 
-namespace ProductManager.Pages
+namespace ProductManager.Pages;
+
+public partial class WarehouseDetailsPage : ContentPage
 {
-    public partial class WarehouseDetailsPage : ContentPage
+    private readonly WarehouseDetailsViewModel _viewModel;
+
+    public WarehouseDetailsPage(WarehouseDetailsViewModel vm)
     {
-        // view model receives warehouse id via iqueryattributable
-        // page only binds view model from di
-        public WarehouseDetailsPage(WarehouseDetailsViewModel vm)
-        {
-            InitializeComponent();
-            BindingContext = vm;
-        }
+        InitializeComponent();
+        BindingContext = _viewModel = vm;
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        // reloads warehouse details and related products each time page is shown.
+        await _viewModel.RefreshData();
     }
 }

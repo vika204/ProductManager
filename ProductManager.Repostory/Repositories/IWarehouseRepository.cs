@@ -6,10 +6,16 @@ namespace ProductManager.Repostory
     // it does not contain business logic and does not return dto
     public interface IWarehouseRepository
     {
-        // return all warehouses from storage
-        IEnumerable<WarehouseDBModel> GetWarehouses();
+        // returns all warehouses from storage.
+        Task<IEnumerable<WarehouseDBModel>> GetWarehousesAsync();
 
-        // return one warehouse by id
-        WarehouseDBModel GetWarehouse(Guid warehouseId);
+        // returns one warehouse by identifier or null if it does not exist.
+        Task<WarehouseDBModel?> GetWarehouseAsync(Guid warehouseId);
+
+        // creates a new warehouse or updates an existing one.
+        Task SaveWarehouseAsync(WarehouseDBModel warehouse);
+
+        // deletes warehouse by identifier.
+        Task DeleteWarehouseAsync(Guid warehouseId);
     }
 }

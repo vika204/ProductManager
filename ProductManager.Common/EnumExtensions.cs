@@ -3,13 +3,13 @@ using System.Reflection;
 
 namespace ProductManager.Common
 {
-    // stores enum value together with its display text for ui binding
+    // stores enum value together with text that will be shown in UI controls.
     public sealed record EnumWithName<TEnum>(TEnum Value, string DisplayName)
         where TEnum : struct, Enum;
 
     public static class EnumExtensions
     {
-        // reads display name from the Display attribute if it exists
+        // returns text for enum value.if DisplayAttribute exists, its text is used.otherwise enum field name is returned.
         public static string GetDisplayName(this Enum value)
         {
             Type type = value.GetType();
@@ -21,32 +21,31 @@ namespace ProductManager.Common
             }
 
             FieldInfo? field = type.GetField(name);
-            DisplayAttribute? display = field?.GetCustomAttribute<DisplayAttribute>();
+            DisplayAttribute? display = field?.GetCustomAttribute<DisplayAttribute>(inherit: false);
 
-            // fallback to enum field name if no Display attribute is defined
-            return display?.Name ?? name;
+            return display?.GetName() ?? name;
         }
 
-        // creates a value-display pair for a single enum value
+        // converts one enum value into a pair . actual value + text for UI.
         public static EnumWithName<TEnum> GetEnumWithName<TEnum>(this TEnum value)
             where TEnum : struct, Enum
         {
             return new EnumWithName<TEnum>(value, value.GetDisplayName());
         }
 
-        // returns all enum values together with their display names
-        public static EnumWithName<TEnum>[] GetValueWithNames<TEnum>()
+        // returns all enum values together with their display names. used for Picker binding in forms.
+        public static EnumWithName<TEnum>[] GetValuesWithNames<TEnum>()
             where TEnum : struct, Enum
         {
             TEnum[] values = Enum.GetValues<TEnum>();
-            EnumWithName<TEnum>[] result = new EnumWithName<TEnum>[values.Length];
+            EnumWithName<TEnum>[] valuesWithNames = new EnumWithName<TEnum>[values.Length];
 
             for (int i = 0; i < values.Length; i++)
             {
-                result[i] = values[i].GetEnumWithName();
+                valuesWithNames[i] = values[i].GetEnumWithName();
             }
 
-            return result;
+            return valuesWithNames;
         }
     }
 }

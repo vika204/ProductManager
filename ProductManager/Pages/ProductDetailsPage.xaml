@@ -1,40 +1,74 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
- x:Class="ProductManager.Pages.ProductDetailsPage"
- xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
- xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
- xmlns:vms="clr-namespace:ProductManager.ViewModels"
- x:DataType="vms:ProductDetailsViewModel"
- Title="Product Details"
- Style="{StaticResource AppPageStyle}">
+    x:Class="ProductManager.Pages.ProductDetailsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vms="clr-namespace:ProductManager.ViewModels"
+    x:DataType="vms:ProductDetailsViewModel"
+    Title="Product Details"
+    IsEnabled="{Binding IsNotBusy}"
+    Style="{StaticResource AppPageStyle}">
 
-    <ScrollView>
-        <Border
-           Style="{StaticResource ProductCardStyle}"
-           Margin="16">
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout Padding="16" Spacing="12">
+                <Border Style="{StaticResource ProductCardStyle}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            Text="{Binding CurrentProduct.Name}"
+                            Style="{StaticResource MainCardTitleStyle}" />
 
-            <VerticalStackLayout Spacing="8">
-                <Label
-                     Text="{Binding Name}"
-                     Style="{StaticResource MainCardTitleStyle}" />
+                        <Label Text="Quantity" Style="{StaticResource SectionCaptionStyle}" />
+                        <Label
+                            Text="{Binding CurrentProduct.Quantity}"
+                            Style="{StaticResource ValueTextStyle}" />
 
-                <Label Text="quantity" Style="{StaticResource SectionCaptionStyle}" />
-                <Label Text="{Binding Quantity}" Style="{StaticResource ValueTextStyle}" />
+                        <Label Text="Price" Style="{StaticResource SectionCaptionStyle}" />
+                        <Label
+                            Text="{Binding CurrentProduct.Price, StringFormat='{}{0:0.00}'}"
+                            Style="{StaticResource ValueTextStyle}" />
 
-                <Label Text="price" Style="{StaticResource SectionCaptionStyle}" />
-                <Label Text="{Binding Price, StringFormat='{}{0:0.00}'}" Style="{StaticResource ValueTextStyle}" />
+                        <Label Text="Category" Style="{StaticResource SectionCaptionStyle}" />
+                        <Label
+                            Text="{Binding CurrentProduct.Category, Converter={StaticResource EnumToDisplayName}}"
+                            Style="{StaticResource ValueTextStyle}" />
 
-                <Label Text="category" Style="{StaticResource SectionCaptionStyle}" />
-                <Label
-                     Text="{Binding Category, Converter={StaticResource EnumToDisplayName}}"
-                     Style="{StaticResource ValueTextStyle}" />
+                        <Label Text="Total value" Style="{StaticResource SectionCaptionStyle}" />
+                        <Label
+                            Text="{Binding CurrentProduct.TotalValue, StringFormat='{}{0:0.00}'}"
+                            Style="{StaticResource ValueTextStyle}" />
 
-                <Label Text="total value" Style="{StaticResource SectionCaptionStyle}" />
-                <Label Text="{Binding TotalValue, StringFormat='{}{0:0.00}'}" Style="{StaticResource ValueTextStyle}" />
+                        <Label Text="Description" Style="{StaticResource SectionCaptionStyle}" />
+                        <Label
+                            Text="{Binding CurrentProduct.Description}"
+                            Style="{StaticResource ValueTextStyle}" />
+                    </VerticalStackLayout>
+                </Border>
 
-                <Label Text="description" Style="{StaticResource SectionCaptionStyle}" />
-                <Label Text="{Binding Description}" Style="{StaticResource ValueTextStyle}" />
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Button
+                        Grid.Column="0"
+                        Text="Edit product"
+                        Command="{Binding EditProductCommand}" />
+
+                    <Button
+                        Grid.Column="1"
+                        Text="Delete product"
+                        Command="{Binding DeleteProductCommand}" />
+                </Grid>
             </VerticalStackLayout>
-        </Border>
-    </ScrollView>
+        </ScrollView>
+
+        <BoxView
+            BackgroundColor="Gray"
+            InputTransparent="False"
+            IsVisible="{Binding IsBusy}"
+            Opacity="0.2" />
+
+        <ActivityIndicator
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center" />
+    </Grid>
 </ContentPage>

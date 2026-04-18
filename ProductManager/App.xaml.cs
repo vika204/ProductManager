@@ -1,17 +1,21 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace ProductManager
+﻿namespace ProductManager
 {
+    // app receives AppShell from DI container.
     public partial class App : Application
     {
-        public App()
+        private readonly AppShell _appShell;
+
+        public App(AppShell appShell)
         {
             InitializeComponent();
+            _appShell = appShell;
+
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new AppShell());
+            // we use injected AppShell instead of creating it manually.
+            return new Window(_appShell);
         }
     }
 }

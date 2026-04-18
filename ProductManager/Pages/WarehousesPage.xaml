@@ -1,36 +1,109 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="ProductManager.Pages.WarehousesPage"
+    x:Name="WarehousesPageRoot"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:models="clr-namespace:ProductManager.DTOModels.Warehouse;assembly=ProductManager.DTOModels"
     xmlns:vms="clr-namespace:ProductManager.ViewModels"
     x:DataType="vms:WarehousesViewModel"
     Title="Warehouses"
+    IsEnabled="{Binding IsNotBusy}"
     Style="{StaticResource AppPageStyle}">
 
-    <CollectionView
-        ItemsSource="{Binding Warehouses}"
-        Margin="16"
-        SelectionMode="Single"
-        SelectedItem="{Binding CurrentWarehouse}"
-        SelectionChangedCommand="{Binding WarehouseSelectedCommand}">
+    <Grid RowDefinitions="Auto,*,Auto">
 
-        <CollectionView.ItemTemplate>
-            <DataTemplate x:DataType="models:WarehouseListDTO">
-                <Border Style="{StaticResource WarehouseCardStyle}">
-                    <VerticalStackLayout Spacing="4">
-                        <Label
-                           Text="{Binding Name}"
-                           Style="{StaticResource MainCardTitleStyle}" />
+        <VerticalStackLayout
+            Grid.Row="0"
+            Padding="16,16,16,8"
+            Spacing="10">   
 
-                        <Label
-                           Text="{Binding Location, Converter={StaticResource EnumToDisplayName}}"
-                           Style="{StaticResource SecondaryInfoStyle}"
-                           HorizontalOptions="Center" />
-                    </VerticalStackLayout>
+            <Border Style="{StaticResource SearchInputBorderStyle}">
+                <Entry
+                    Placeholder="Search warehouses"
+                    Text="{Binding SearchText}" />
+            </Border>
+
+            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+                <Border
+                    Grid.Column="0"
+                    Style="{StaticResource SearchInputBorderStyle}">
+                    <Picker
+                        Title="Sort by"
+                        TextColor="{StaticResource TextPrimary}"
+                        TitleColor="{StaticResource TextSecondary}"
+                        ItemsSource="{Binding SortOptions}"
+                        SelectedItem="{Binding SelectedSortOption}" />
                 </Border>
-            </DataTemplate>
-        </CollectionView.ItemTemplate>
-    </CollectionView>
+
+                <Button
+                    Grid.Column="1"
+                    Text="Apply"
+                    Command="{Binding ApplyFiltersCommand}" />
+
+                <Button
+                    Grid.Column="2"
+                    Text="Add warehouse"
+                    Command="{Binding AddWarehouseCommand}" />
+            </Grid>
+        </VerticalStackLayout>
+        <!-- main list of warehouses -->
+        <RefreshView
+            Grid.Row="1"
+            Command="{Binding RefreshDataCommand}">
+            <CollectionView
+                Margin="16,0,16,16"
+                ItemsSource="{Binding Warehouses}"
+                SelectionMode="Single"
+                SelectedItem="{Binding CurrentWarehouse}"
+                SelectionChangedCommand="{Binding GotoWarehouseCommand}">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:WarehouseListDTO">
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems Mode="Reveal">
+                                    <SwipeItem
+                                        BackgroundColor="Red"
+                                        Text="Delete"
+                                        Command="{Binding Source={x:Reference WarehousesPageRoot}, Path=BindingContext.DeleteWarehouseCommand}"
+                                        CommandParameter="{Binding .}" />
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+
+                            <Border Style="{StaticResource WarehouseCardStyle}">
+                                <VerticalStackLayout Spacing="6">
+                                    <Label
+                                        Text="{Binding Name}"
+                                        Style="{StaticResource MainCardTitleStyle}" />
+
+                                    <Label
+                                        Text="{Binding Location, Converter={StaticResource EnumToDisplayName}}"
+                                        Style="{StaticResource SecondaryInfoStyle}" />
+
+                                    <Label
+                                        Text="{Binding TotalValue, StringFormat='Total value: {0:0.00}'}"
+                                        Style="{StaticResource ValueTextStyle}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <BoxView
+            Grid.RowSpan="3"
+            BackgroundColor="Gray"
+            InputTransparent="False"
+            IsVisible="{Binding IsBusy}"
+            Opacity="0.2" />
+
+        <ActivityIndicator
+            Grid.RowSpan="3"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center" />
+    </Grid>
 </ContentPage>

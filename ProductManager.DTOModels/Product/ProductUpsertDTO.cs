@@ -2,36 +2,26 @@
 
 namespace ProductManager.DTOModels.Product
 {
-    // dto for product details page
-    // contains full product data needed for details screen
-    // it doesnt contain setters because it is only used to show data and should not be modified
-    public class ProductDetailsDTO
+    public class ProductUpsertDTO
     {
-        public Guid Id { get; }
-
+        // warehouseId is required because product cannot exist without warehouse.
         public Guid WarehouseId { get; }
 
+        // editable fields of product entity.
         public string Name { get; }
-
         public int Quantity { get; }
-
         public decimal Price { get; }
-
         public ProductCategory Category { get; }
-
         public string Description { get; }
-        public decimal TotalValue { get; }
 
-        public ProductDetailsDTO(Guid id, Guid warehouseId, string name, int quantity, decimal price, ProductCategory category, string description)
+        public ProductUpsertDTO(Guid warehouseId, string name, int quantity, decimal price, ProductCategory category, string description)
         {
-            Id = id;
             WarehouseId = warehouseId;
             Name = name;
             Quantity = quantity;
             Price = price;
             Category = category;
             Description = description;
-            TotalValue = quantity * price;
         }
     }
 }

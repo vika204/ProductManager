@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ProductManager.Pages.ProductUpsertPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vms="clr-namespace:ProductManager.ViewModels"
+    x:DataType="vms:ProductUpsertViewModel"
+    Title="{Binding PageTitle}"
+    IsEnabled="{Binding IsNotBusy}"
+    Style="{StaticResource AppPageStyle}">
+
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout Padding="16" Spacing="10">
+
+                <Label Text="Product name" />
+                <Border Style="{StaticResource FormInputBorderStyle}">
+                    <Entry
+                        Placeholder="Product name"
+                        Text="{Binding Name}" />
+                </Border>
+                <Label
+                    IsVisible="{Binding NameError, Converter={StaticResource StringToBoolConverter}}"
+                    Text="{Binding NameError}"
+                    TextColor="Red" />
+
+                <Label Text="Quantity" />
+                <Border Style="{StaticResource FormInputBorderStyle}">
+                    <Entry
+                        Placeholder="Quantity"
+                        Keyboard="Numeric"
+                        Text="{Binding Quantity}" />
+                </Border>
+                <Label
+                    IsVisible="{Binding QuantityError, Converter={StaticResource StringToBoolConverter}}"
+                    Text="{Binding QuantityError}"
+                    TextColor="Red" />
+
+                <Label Text="Price" />
+                <Border Style="{StaticResource FormInputBorderStyle}">
+                    <Entry
+                        Placeholder="Price"
+                        Keyboard="Numeric"
+                        Text="{Binding Price}" />
+                </Border>
+                <Label
+                    IsVisible="{Binding PriceError, Converter={StaticResource StringToBoolConverter}}"
+                    Text="{Binding PriceError}"
+                    TextColor="Red" />
+
+                <Label Text="Category" />
+                <Border Style="{StaticResource FormInputBorderStyle}">
+                    <Picker
+                        Title="Select category"
+                        TextColor="{StaticResource TextPrimary}"
+                        TitleColor="{StaticResource TextSecondary}"
+                        ItemsSource="{Binding Categories}"
+                        ItemDisplayBinding="{Binding DisplayName}"
+                        SelectedItem="{Binding Category}" />
+                </Border>
+                <Label
+                    IsVisible="{Binding CategoryError, Converter={StaticResource StringToBoolConverter}}"
+                    Text="{Binding CategoryError}"
+                    TextColor="Red" />
+
+                <Label Text="Description" />
+                <Border Style="{StaticResource FormEditorBorderStyle}">
+                    <Editor
+                        AutoSize="TextChanges"
+                        Placeholder="Description"
+                        Text="{Binding Description}" />
+                </Border>
+                <Label
+                    IsVisible="{Binding DescriptionError, Converter={StaticResource StringToBoolConverter}}"
+                    Text="{Binding DescriptionError}"
+                    TextColor="Red" />
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Button
+                        Grid.Column="0"
+                        Text="Save"
+                        Command="{Binding SaveProductCommand}" />
+
+                    <Button
+                        Grid.Column="1"
+                        Text="Back"
+                        Command="{Binding BackCommand}" />
+                </Grid>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <BoxView
+            BackgroundColor="Gray"
+            InputTransparent="False"
+            IsVisible="{Binding IsBusy}"
+            Opacity="0.2" />
+
+        <ActivityIndicator
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center" />
+    </Grid>
+</ContentPage>

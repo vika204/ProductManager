@@ -1,24 +1,38 @@
 ﻿using ProductManager.Common.Enums;
-using System;
+using SQLite;
 
 namespace ProductManager.DBModels
 {
+    [Table("Warehouses")]
     public class WarehouseDBModel
     {
-        // id property is readonly and is set through the constructor
-        public Guid Id { get; }
+        // Primary key of warehouse entity in the database.
+        [PrimaryKey]
+        public Guid Id { get; set; }
 
         // name can be changed
+        [NotNull]
         public string Name { get; set; }
 
         // location can be changed
         public WarehouseLocation Location { get; set; }
 
-        private WarehouseDBModel() { }
-
-        public WarehouseDBModel(string name, WarehouseLocation location)
+        // parameterless constructor is required by SQLite.
+        public WarehouseDBModel()
         {
-            Id = Guid.NewGuid();
+            Name = string.Empty;
+        }
+
+        // сonstructor for creating a new warehouse
+        public WarehouseDBModel(string name, WarehouseLocation location)
+            : this(Guid.NewGuid(), name, location)
+        {
+        }
+
+        // сonstructor for creating an object with a predefined identifier.
+        public WarehouseDBModel(Guid id, string name, WarehouseLocation location)
+        {
+            Id = id;
             Name = name;
             Location = location;
         }
